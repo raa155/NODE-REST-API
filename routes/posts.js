@@ -61,6 +61,18 @@ router.put('/:id/like', async (req, res) => {
    }
 });
 
+//comments
+router.put('/:id/comment', async (req, res) => {
+   try {
+      const post = await Post.findById(req.params.id);
+      const comment = await { comment: req.body.comments, user: req.body.userId }
+      await post.updateOne({ $push: { comments: comment } });
+      res.status(200).json('The comment has been added to the post');
+   } catch (err) {
+      res.status(500).json(err);
+   }
+})
+
 //get timeline posts
 router.get("/timeline", async (req, res) => {
    try {
@@ -87,11 +99,6 @@ router.get('/:id', async (req, res) => {
       res.status(500).json(err);
    }
 });
-
-
-
-
-
 
 
 module.exports = router;
